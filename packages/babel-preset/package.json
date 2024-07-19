@@ -1,0 +1,53 @@
+{
+  "name": "@finos/babel-preset-legend-studio",
+  "version": "2.0.69",
+  "description": "Legend Studio Babel preset",
+  "keywords": [
+    "legend",
+    "legend-studio",
+    "babel",
+    "babelpreset",
+    "babel-preset"
+  ],
+  "homepage": "https://github.com/finos/legend-studio/tree/master/packages/babel-preset",
+  "bugs": {
+    "url": "https://github.com/finos/legend-studio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/finos/legend-studio.git",
+    "directory": "packages/babel-preset"
+  },
+  "license": "Apache-2.0",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "clean": "yarn clean:cache",
+    "clean:cache": "rimraf \"build\"",
+    "lint:js": "cross-env NODE_ENV=production eslint --cache --cache-location ./build/.eslintcache --report-unused-disable-directives --parser-options=requireConfigFile:false \"./*.{mjs,cjs,js}\"",
+    "publish:prepare": "node ../../scripts/release/preparePublishContent.js",
+    "publish:snapshot": "node ../../scripts/release/publishDevSnapshot.js"
+  },
+  "dependencies": {
+    "@babel/helper-plugin-utils": "7.24.8",
+    "@babel/plugin-syntax-import-attributes": "7.24.7",
+    "@babel/preset-env": "7.24.8",
+    "@babel/preset-react": "7.24.7",
+    "@babel/preset-typescript": "7.24.7",
+    "@babel/runtime": "7.24.8",
+    "react-refresh": "0.14.2"
+  },
+  "devDependencies": {
+    "cross-env": "7.0.3",
+    "eslint": "8.57.0",
+    "rimraf": "6.0.1",
+    "typescript": "5.5.3"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0"
+  },
+  "publishConfig": {
+    "directory": "build/publishContent"
+  }
+}

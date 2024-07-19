@@ -1,0 +1,349 @@
+/**
+ * Copyright (c) 2020-present, Goldman Sachs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use 'mixins' as *;
+
+.query-setup__landing-page__action--data-space:hover {
+  background: var(--color-yellow-100);
+}
+
+.query-setup__landing-page__icon--data-space {
+  font-size: 1.3rem;
+}
+
+.query-builder__setup__data-space-setup {
+  .query-builder__setup.panel {
+    height: fit-content;
+  }
+
+  .query-builder__side-bar__content {
+    height: 100%;
+  }
+}
+
+.query-builder__setup__data-space {
+  &--with-runtime {
+    .query-builder__setup.panel {
+      height: fit-content;
+    }
+
+    .query-builder__side-bar__content {
+      height: 100%;
+      overflow: auto;
+    }
+  }
+
+  &__option {
+    @include ellipsisTextOverflow;
+
+    display: inline-flex;
+  }
+
+  &__option__path {
+    font-size: 1.2rem;
+    color: var(--color-dark-grey-400);
+    margin-left: 0.5rem;
+    line-height: 1.4rem;
+  }
+
+  &__option__gav {
+    font-size: 1.2rem;
+    color: var(--color-blue-50);
+    margin-left: 0.5rem;
+    line-height: 1.4rem;
+  }
+
+  &__icon__execution-context {
+    color: var(--color-lime-75);
+  }
+}
+
+.query-builder__setup__data-space-searcher {
+  &__btn {
+    @include flexConstantDimension;
+
+    height: 2.8rem;
+    width: 2.8rem;
+    margin-left: 0.5rem;
+  }
+}
+
+.data-space-advanced-search__dialog {
+  height: calc(100vh - 4rem);
+  width: calc(100vw - 4rem);
+  border: none !important;
+
+  &__container__content {
+    max-height: 100vh !important;
+  }
+
+  &__header {
+    @include flexVCenter;
+
+    height: 3.8rem;
+  }
+
+  &__header__actions {
+    @include flexVCenter;
+
+    height: 100%;
+  }
+
+  &__header__action {
+    @include flexCenter;
+
+    height: 100%;
+    width: 3.8rem;
+
+    svg {
+      font-size: 1.6rem;
+      color: var(--color-dark-shade-300);
+    }
+
+    &:hover svg {
+      color: var(--color-dark-shade-800);
+    }
+  }
+
+  &__content {
+    height: calc(100% - 3.8rem);
+    border: 0.1rem solid var(--color-dark-grey-80);
+  }
+
+  &__input {
+    @include flexVCenter;
+
+    padding: 0.5rem;
+    width: 100%;
+    height: 3.8rem;
+    background: var(--color-dark-grey-200);
+  }
+
+  &__input__icon {
+    @include flexCenter;
+    @include flexConstantDimension;
+
+    width: 2.8rem;
+    margin-right: 0.5rem;
+  }
+
+  &__input__selector {
+    width: calc(100% - 3.3rem);
+  }
+
+  &__input__use-snapshot-btn {
+    @include flexCenter;
+
+    height: 2.8rem;
+    width: 2.8rem;
+    border-radius: 0 0.2rem 0.2rem 0;
+    background: var(--color-dark-grey-300);
+
+    svg {
+      color: var(--color-light-grey-50);
+    }
+
+    &--active {
+      background: var(--color-blue-100);
+    }
+  }
+
+  &__input__proceed-btn {
+    @include flexCenter;
+    @include flexConstantDimension;
+
+    width: 2.8rem;
+    height: 2.8rem;
+    color: var(--color-light-grey-200);
+    margin-left: 0.5rem;
+  }
+
+  &__option {
+    @include ellipsisTextOverflow;
+
+    display: inline-flex;
+  }
+
+  &__option__path {
+    font-size: 1.2rem;
+    color: var(--color-dark-grey-400);
+    margin-left: 0.5rem;
+    line-height: 1.4rem;
+  }
+
+  &__option__gav {
+    font-size: 1.2rem;
+    color: var(--color-blue-50);
+    margin-left: 0.5rem;
+    line-height: 1.4rem;
+  }
+
+  &__view {
+    height: calc(100% - 3.8rem);
+    width: 100%;
+
+    &--failed {
+      @include flexVCenter;
+
+      height: 2.8rem;
+
+      &__icon {
+        @include flexCenter;
+
+        height: 100%;
+      }
+
+      &__text {
+        margin-left: 0.5rem;
+        color: var(--color-dark-grey-300);
+        font-weight: 700;
+        cursor: default;
+        user-select: none;
+        text-align: center;
+        line-height: 2.8rem;
+      }
+    }
+  }
+}
+
+.query-builder__data-space__template-query-panel {
+  height: 50vh;
+  width: 20vw;
+  pointer-events: all;
+
+  &__container {
+    &__root {
+      border-radius: 0;
+    }
+  }
+
+  &__header {
+    @include flexCenter;
+
+    padding: 0.5rem;
+    border-bottom: 0.1rem solid var(--color-dark-grey-250);
+    height: 4.4rem;
+    position: relative;
+    color: var(--color-light-grey-50);
+    font-weight: 500;
+  }
+
+  &__query {
+    @include flexCenter;
+
+    &__icon {
+      width: 5%;
+      color: var(--color-legacylight-orange-100);
+      margin-left: 1rem;
+      align-items: center;
+    }
+
+    &__entry {
+      @include flexCenter;
+
+      align-items: flex-start;
+      margin-top: 1rem;
+      width: 85%;
+
+      &__content {
+        width: 100%;
+        margin-left: 1rem;
+
+        &__title {
+          @include flexVCenter;
+
+          text-align: left;
+          color: var(--color-blue-50);
+        }
+
+        &__description {
+          @include flexVCenter;
+
+          text-align: left;
+          margin-top: 0.5rem;
+          color: var(--color-dark-grey-500);
+        }
+      }
+    }
+
+    &__share {
+      width: 10%;
+      color: var(--color-blue-50);
+      margin-right: 1rem;
+      margin-top: 1rem;
+
+      &__label {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  &__query__entry:hover {
+    text-decoration: underline;
+    color: var(--color-blue-50);
+  }
+
+  &__query__share:hover {
+    color: var(--color-blue-40);
+  }
+}
+
+.query-builder__data-space__template-query {
+  position: relative;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    height: 2.2rem;
+    padding: 1rem;
+
+    svg {
+      font-size: 1.2rem;
+    }
+  }
+
+  &__btn {
+    color: var(--color-legacylight-orange-100);
+    position: absolute;
+    right: 1rem;
+    font-size: 1.2rem;
+  }
+}
+
+.query-editor__dataspace__header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+
+  &__title__text {
+    margin-right: 0% !important;
+  }
+
+  &__title__tag {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-legacylight-orange-100);
+    padding: 0 1rem;
+    height: 2.2rem;
+    margin-left: 1rem;
+    border-radius: 0.2rem 0 0 0.2rem;
+    font-size: 1.2rem;
+    user-select: none;
+  }
+}

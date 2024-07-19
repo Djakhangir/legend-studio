@@ -1,0 +1,56 @@
+{
+  "name": "@finos/eslint-plugin-legend-studio",
+  "version": "2.0.78",
+  "description": "ESLint rules for Legend Studio",
+  "keywords": [
+    "legend",
+    "legend-studio",
+    "eslint",
+    "eslintplugin"
+  ],
+  "homepage": "https://github.com/finos/legend-studio/tree/master/packages/eslint-plugin",
+  "bugs": {
+    "url": "https://github.com/finos/legend-studio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/finos/legend-studio.git",
+    "directory": "packages/eslint-plugin"
+  },
+  "license": "Apache-2.0",
+  "files": [
+    "src",
+    "index.js"
+  ],
+  "scripts": {
+    "clean": "yarn clean:cache",
+    "clean:cache": "rimraf \"build\"",
+    "lint:js": "cross-env NODE_ENV=production eslint --cache --cache-location ./build/.eslintcache --report-unused-disable-directives --parser-options=requireConfigFile:false \"./*.{mjs,cjs,js}\" \"src/**/*.{mjs,cjs,js}\"",
+    "publish:prepare": "node ../../scripts/release/preparePublishContent.js",
+    "publish:snapshot": "node ../../scripts/release/publishDevSnapshot.js"
+  },
+  "dependencies": {
+    "@babel/core": "7.24.8",
+    "@babel/eslint-parser": "7.24.8",
+    "@typescript-eslint/eslint-plugin": "7.16.0",
+    "@typescript-eslint/parser": "7.16.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-import": "2.29.1",
+    "eslint-plugin-prettier": "5.1.3",
+    "eslint-plugin-react": "7.34.3",
+    "eslint-plugin-react-hooks": "4.6.2",
+    "micromatch": "4.0.7",
+    "prettier": "3.3.2"
+  },
+  "devDependencies": {
+    "cross-env": "7.0.3",
+    "rimraf": "6.0.1"
+  },
+  "peerDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  },
+  "publishConfig": {
+    "directory": "build/publishContent"
+  }
+}

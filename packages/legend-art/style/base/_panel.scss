@@ -1,0 +1,675 @@
+/**
+ * Copyright (c) 2020-present, Goldman Sachs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use 'mixins' as *;
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  &__header {
+    @include flexVCenter;
+    @include flexHSpaceBetween;
+
+    cursor: default;
+    background: var(--color-light-grey-200);
+    height: 2.8rem;
+    min-height: 2.8rem;
+    position: relative;
+    z-index: 1;
+    padding-left: 1rem;
+    box-shadow: var(--color-dark-shade-280) 0 0.1rem 0.5rem 0;
+
+    &--dark {
+      background: var(--color-dark-grey-50);
+    }
+  }
+
+  &__header__actions {
+    @include flexVCenter;
+
+    display: flex;
+    height: 100%;
+  }
+
+  &__header__action {
+    @include flexCenter;
+
+    background: transparent;
+    cursor: pointer;
+    width: 2.8rem;
+  }
+
+  &__header__action[disabled] svg {
+    color: var(--color-light-grey-400) !important;
+  }
+
+  &__header__title {
+    @include flexVCenter;
+
+    user-select: none;
+
+    &--light {
+      color: var(--color-dark-grey-400);
+      background: var(--color-light-grey-50);
+    }
+  }
+
+  &__header__title__label {
+    height: 1.8rem;
+    line-height: 1.8rem;
+    border-radius: 0.1rem;
+    padding: 0 0.5rem;
+    color: var(--color-light-grey-100);
+    background: var(--color-dark-grey-300);
+    font-size: 1.1rem;
+    cursor: default;
+    margin-right: 0.5rem;
+    white-space: nowrap;
+
+    &--light {
+      color: var(--color-dark-grey-400);
+      background: var(--color-light-grey-50);
+    }
+  }
+
+  &__header__title__label__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem;
+    font-weight: 400;
+    font-size: 1.2rem;
+    font-style: italic; // background: var(--color-dark-grey-280);
+  }
+
+  &__header__title__content {
+    @include ellipsisTextOverflow;
+
+    font-weight: bold;
+  }
+
+  &__header--with-tabs {
+    padding-left: 0;
+  }
+
+  &__header__tabs {
+    height: 2.8rem;
+    z-index: 1;
+    display: flex;
+    overflow-x: overlay;
+    overflow-y: hidden;
+  }
+
+  &__header__tab {
+    @include flexCenter;
+
+    display: inline-flex;
+    font-size: 1.2rem;
+    height: 100%;
+    color: var(--color-light-grey-400);
+    padding: 0 1rem;
+    border-right: 0.1rem solid var(--color-dark-grey-80);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  &__header__tab--active {
+    position: relative;
+  }
+
+  &__header__tab--active::after {
+    content: '';
+    height: 0.2rem;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background: var(--color-yellow-200);
+  }
+
+  &__content {
+    background: var(--color-light-grey-100);
+    height: calc(100% - 2.8rem);
+    overflow-y: auto;
+
+    &--dark {
+      color: var(--color-light-grey-50);
+      background: var(--color-dark-grey-50);
+    }
+  }
+
+  &__content--full {
+    height: 100%;
+    width: 100%;
+    padding: 0.5rem 0;
+  }
+
+  &__content__blank {
+    @include flexCenter;
+
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    &__content {
+      color: var(--color-dark-grey-300);
+      font-weight: 700;
+      cursor: default;
+      user-select: none;
+      padding: 0 5rem;
+      text-align: center;
+      line-height: 1.8rem;
+    }
+
+    &__content--hide {
+      visibility: hidden;
+    }
+  }
+
+  &__content__list {
+    height: 100%;
+    width: 100%;
+    padding-top: 0.5rem;
+  }
+
+  &__content--has-validation-error {
+    overflow: hidden;
+    position: relative;
+    padding: 0 !important;
+    margin: 0;
+  }
+
+  &__content__validation-error {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: var(--color-dark-red-shade-50);
+    border: 0.1rem solid var(--color-red-100);
+    z-index: 100;
+    padding: 1rem;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    pointer-events: none; // allow clicking through
+
+    svg {
+      pointer-events: all;
+      cursor: help;
+      color: var(--color-red-100);
+      stroke-width: 0.4;
+      stroke: var(--color-red-100);
+    }
+  }
+
+  .input--small {
+    max-width: 45rem;
+  }
+
+  .input--full {
+    width: 45rem;
+  }
+}
+
+.panel__list-selector {
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 2.4rem;
+    padding: 1rem;
+
+    &__label {
+      color: var(--color-white);
+      font-size: 1.2rem;
+      white-space: nowrap;
+    }
+
+    &--with-validation--error {
+      background: var(--color-red-500);
+    }
+  }
+
+  &__item:hover {
+    background: var(--color-dark-blue-shade-100);
+    cursor: pointer;
+  }
+
+  &__item--selected,
+  &__item--selected:hover {
+    background: var(--color-light-blue-450);
+  }
+
+  &__item--selected--with-validation--error,
+  &__item--selected--with-validation--error:hover {
+    background: var(--color-red-400);
+  }
+}
+
+.panel__content__form {
+  max-width: 80rem;
+  padding: 2rem;
+
+  & > div:last-child {
+    margin-bottom: 0;
+  }
+
+  &__list {
+    margin: 1rem 0;
+
+    &__item {
+      @include flexVCenter;
+
+      width: 100%;
+      display: flex;
+
+      &--expand-width {
+        justify-content: space-between;
+      }
+
+      &__label {
+        display: flex;
+      }
+
+      &__title {
+        display: flex;
+        margin-right: 1rem;
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__description {
+    @include flexVCenter;
+
+    background: var(--color-dark-grey-100);
+    color: var(--color-light-grey-400);
+    padding: 1rem;
+    width: 60%;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 3rem;
+    line-height: 1.9rem;
+  }
+
+  &__section {
+    padding: 0 1rem;
+
+    & + & {
+      margin-top: 2rem;
+    }
+
+    &__divider {
+      height: 1rem;
+      width: 100%;
+      border-bottom: 0.1rem solid var(--color-dark-grey-100);
+    }
+  }
+
+  &__divider {
+    padding: 0.5rem 0;
+  }
+
+  &__section__header__label {
+    @include flexVCenter;
+
+    font-weight: 500;
+    color: var(--color-light-grey-50);
+    margin-bottom: 0.5rem;
+    line-height: 2rem;
+    cursor: default;
+  }
+
+  &__section__header__label__lock {
+    svg {
+      margin-left: 0.5rem;
+      font-size: 1.2rem;
+      color: var(--color-dark-grey-300);
+    }
+  }
+
+  &__section__header__prompt {
+    word-break: break-word;
+    font-size: 1.4rem;
+    color: var(--color-light-grey-400);
+    line-height: 2rem;
+    margin-bottom: 0.8rem;
+    cursor: default;
+  }
+
+  &__section__input {
+    width: 100%;
+    min-width: 5rem;
+    margin: 0;
+    padding: 1rem;
+    border-radius: 0.1rem;
+    border: 0.1rem solid var(--color-dark-grey-100);
+    background: var(--color-dark-grey-100);
+    color: var(--color-light-grey-200);
+    height: 2.8rem;
+
+    &:focus {
+      border: 0.1rem solid var(--color-blue-200);
+      outline: none;
+    }
+
+    &[disabled] {
+      color: var(--color-dark-grey-500);
+      cursor: not-allowed;
+    }
+
+    &__container {
+      @include flexVCenter;
+
+      position: relative;
+    }
+
+    &__container & {
+      padding-right: 3.8rem;
+    }
+
+    &__reset-btn {
+      @include flexCenter;
+
+      position: absolute;
+      right: 0;
+      height: 2.8rem;
+      width: 2.8rem;
+      color: var(--color-dark-grey-400);
+
+      &:hover {
+        color: var(--color-light-grey-400);
+      }
+    }
+  }
+
+  &__section__textarea {
+    width: 100%;
+    min-width: 5rem;
+    max-width: 45rem;
+    background: var(--color-dark-grey-100);
+    color: var(--color-light-grey-200);
+    padding: 1rem;
+    border-radius: 0.1rem;
+    height: 8rem !important;
+    resize: none;
+    line-height: 2rem;
+    border: 0.1rem solid var(--color-dark-grey-100);
+
+    &:focus {
+      border: 0.1rem solid var(--color-blue-200);
+      outline: none;
+    }
+
+    &[disabled] {
+      color: var(--color-dark-grey-500);
+      cursor: not-allowed;
+    }
+  }
+
+  &__section__text-editor {
+    width: 100%;
+    height: 35rem;
+    position: relative;
+    border: 0.1rem solid var(--color-dark-grey-100);
+    resize: both;
+    overflow: hidden;
+  }
+
+  &__section__number-input {
+    width: 20rem;
+  }
+
+  &__section__toggler {
+    @include flexVCenter;
+
+    cursor: pointer;
+  }
+
+  &__section__toggler__btn {
+    align-self: flex-start;
+    padding-top: 0.2rem;
+
+    svg {
+      font-size: 2rem;
+      color: var(--color-dark-grey-250);
+    }
+
+    &:hover svg {
+      font-size: 2rem;
+      color: var(--color-dark-grey-280);
+    }
+
+    &[disabled] svg,
+    &[disabled]:hover svg {
+      cursor: not-allowed;
+      color: var(--color-dark-grey-250);
+    }
+  }
+
+  &__section__toggler__btn--toggled {
+    svg {
+      font-size: 2rem;
+      color: var(--color-blue-150);
+    }
+
+    &:hover svg {
+      font-size: 2rem;
+      color: var(--color-blue-100);
+    }
+
+    &[disabled] svg,
+    &[disabled]:hover svg {
+      cursor: not-allowed;
+      color: var(--color-dark-grey-300);
+    }
+  }
+
+  &__section__toggler__prompt {
+    @include flexCenter;
+
+    word-break: break-word;
+    margin-left: 0.8rem;
+    color: var(--color-light-grey-400);
+    line-height: 2rem;
+    user-select: none;
+    cursor: pointer;
+
+    svg {
+      margin-left: 0.5rem;
+    }
+  }
+
+  &__section__dropdown {
+    max-width: 45rem;
+  }
+
+  &__section__list {
+    max-width: 45rem;
+  }
+
+  &__section__list__empty {
+    @include flexCenter;
+
+    height: 4rem;
+    width: 100%;
+    color: var(--color-dark-grey-300);
+    font-weight: 500;
+    max-width: 45rem;
+    border: 0.2rem dashed var(--color-dark-grey-200);
+    margin-bottom: 1rem;
+  }
+
+  &__section__list__items {
+    margin-bottom: 0.8rem;
+    max-width: 45rem;
+  }
+
+  &__section__list__item--customized {
+    margin-bottom: 0.5rem;
+  }
+
+  &__section__list__item {
+    @include flexVCenter;
+    @include flexHSpaceBetween;
+
+    height: 2.2rem;
+    line-height: 2.2rem;
+    padding-left: 0.3rem;
+    color: var(--color-light-grey-400);
+    font-size: 1.3rem;
+  }
+
+  &__section__list__item:hover {
+    background: var(--color-dark-grey-200);
+
+    .panel__content__form__section__list__item__actions {
+      display: flex;
+
+      button[disabled] {
+        display: none;
+      }
+    }
+  }
+
+  &__section__list__item__key {
+    display: flex;
+    margin-left: 0.2rem;
+  }
+
+  &__section__list__item__value {
+    @include ellipsisTextOverflow;
+
+    margin-left: 0.2rem;
+  }
+
+  &__section__list__item__value__map-item {
+    &__key {
+      font-weight: 500;
+      color: var(--color-blue-100);
+    }
+
+    &__separator {
+      margin: 0 0.3rem;
+    }
+  }
+
+  &__section__list__item__actions {
+    display: none;
+    height: 2.2rem;
+    padding: 0 0.3rem;
+  }
+
+  &__section__list__new-item {
+    display: flex;
+
+    &__add {
+      display: flex;
+      margin-top: 0.8rem;
+    }
+
+    &__input {
+      margin-right: 0.5rem;
+      padding: 0.5rem;
+      height: 2.2rem;
+      line-height: 2.2rem;
+      background: var(--color-dark-grey-100);
+      border: 0.1rem solid var(--color-dark-grey-100);
+
+      &:focus {
+        border: 0.1rem solid var(--color-blue-200);
+        outline: none;
+      }
+    }
+
+    &__actions {
+      display: flex;
+    }
+
+    &__add-btn,
+    &__cancel-btn {
+      font-size: 1.2rem;
+      height: 2.2rem;
+      padding: 0 1rem;
+
+      &[disabled] {
+        cursor: not-allowed;
+      }
+    }
+
+    &__cancel-btn {
+      background: var(--color-dark-grey-200);
+
+      &:hover {
+        background: var(--color-dark-grey-250);
+      }
+    }
+  }
+
+  &__section__list .btn {
+    cursor: pointer;
+    border: none;
+    padding: 0 1rem;
+    border-radius: 0.2rem;
+    font-size: 1.2rem;
+
+    &[disabled] {
+      cursor: not-allowed;
+    }
+  }
+
+  &__section__list__item__edit-btn,
+  &__section__list__item__remove-btn {
+    @include flexCenter;
+
+    cursor: pointer;
+    width: 2.2rem;
+
+    svg {
+      color: var(--color-light-grey-400);
+    }
+
+    &:hover svg {
+      color: var(--color-light-grey-100) !important;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.panel__dnd__dropzone {
+  &__overlay {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: var(--color-dnd__overlay);
+    filter: blur(0.05rem);
+    pointer-events: none; // pass all mouse event through it (used for nested DnD)
+    z-index: 1;
+  }
+
+  &__content {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    pointer-events: all;
+    display: flex;
+    flex-direction: column;
+  }
+}

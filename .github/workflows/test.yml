@@ -1,0 +1,70 @@
+name: Test
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # runs every day on default/base branch
+  push:
+    branches:
+      - master
+      - 'release/**'
+  pull_request:
+    branches:
+      - '**'
+
+# Cancel running jobs from previous pipelines of the same workflow on PR to save resource when commits are pushed quickly
+# NOTE: we don't want this behavior on default branch
+# See https://stackoverflow.com/a/68422069
+concurrency:
+  group: ${{ github.ref == 'refs/heads/master' && format('ci-default-branch-{0}-{1}', github.sha, github.workflow) || format('ci-pr-{0}-{1}', github.ref, github.workflow) }}
+  cancel-in-progress: true
+
+jobs:
+  run-tests:
+    name: Run Test Group
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: core
+          - group: engine-roundtrip
+          - group: repl
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+        with:
+          fetch-depth: 2 # recommended for improving relevancy of test coverage reporting
+      - name: Get Yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - name: Setup Yarn cache
+        uses: actions/cache@v4.0.2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+      - name: Setup Node
+        uses: actions/setup-node@v4.0.3
+        with:
+          node-version: 21
+      - name: Run engine server
+        working-directory: ./fixtures/legend-docker-setup/grammar-test-setup
+        run: docker compose --file=grammar-test-setup-docker-compose.yml up --detach
+      - name: Install dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      - name: Test
+        run: yarn test:ci ${{ matrix.group }}
+      - name: Shut down engine server
+        working-directory: ./fixtures/legend-docker-setup/grammar-test-setup
+        run: docker compose --file=grammar-test-setup-docker-compose.yml down
+      # Codecov will take care of merging the result from different test groups
+      # See https://about.codecov.io/product/feature/report-merging/
+      - name: Upload test coverage report
+        uses: codecov/codecov-action@v4.5.0
+        with:
+          directory: ./build/coverage
+          token: ${{ secrets.CODECOV_TOKEN }}
+

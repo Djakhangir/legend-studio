@@ -1,0 +1,538 @@
+/**
+ * Copyright (c) 2020-present, Goldman Sachs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@use 'mixins' as *;
+
+.query-setup {
+  @include flexHCenter;
+
+  width: 100%;
+  height: calc(100% - 2.2rem);
+  padding: 20rem;
+  overflow: overlay;
+}
+
+.query-setup__status-bar {
+  @include flexVCenter;
+  @include flexHSpaceBetween;
+
+  height: 2.2rem;
+  background: var(--color-blue-100);
+  color: var(--color-light-grey-0);
+  padding: 0 0.5rem 0 1rem;
+
+  &__left {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &__right {
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &__action {
+    @include flexCenter;
+
+    cursor: pointer;
+    background: none;
+    height: 100%;
+    width: 3rem;
+
+    &__toggler {
+      color: var(--color-dark-shade-300);
+
+      &--toggled {
+        color: var(--color-light-grey-0);
+      }
+    }
+  }
+}
+
+.query-setup__landing-page {
+  display: flex;
+  flex-direction: column;
+  width: 62rem;
+
+  &__title {
+    @include flexVCenter;
+
+    justify-content: flex-start;
+    color: var(--color-light-grey-400);
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    cursor: default;
+    user-select: none;
+  }
+
+  &__title__question-mark {
+    margin-left: 0.7rem;
+    color: var(--color-dark-grey-500);
+    font-size: 1.6rem;
+
+    &:hover {
+      color: var(--color-yellow-100);
+      cursor: help;
+    }
+  }
+
+  &__action-group {
+    display: flex;
+    flex-direction: column;
+    background: var(--color-dark-grey-80);
+    border-radius: 0.2rem;
+    position: relative;
+
+    &__tag {
+      @include flexVCenter;
+
+      height: 1.6rem;
+      background: var(--color-blue-200);
+      color: var(--color-light-grey-0);
+      font-size: 1.1rem;
+      padding: 0.5rem;
+      border-radius: 0.2rem;
+      margin-left: 0.5rem;
+      position: absolute;
+      top: -0.5rem;
+      font-weight: 700;
+      font-family: 'Roboto Mono', monospace;
+      user-select: none;
+      cursor: default;
+    }
+
+    &--studio &__tag {
+      background: var(--color-purple-200);
+    }
+
+    &__header {
+      @include flexVCenter;
+
+      justify-content: flex-end;
+      height: 2.5rem;
+    }
+
+    &__config {
+      @include flexCenter;
+
+      height: 2.5rem;
+      width: 2.5rem;
+      cursor: pointer;
+      color: var(--color-dark-grey-400);
+      position: relative;
+
+      &:hover {
+        color: var(--color-dark-grey-500);
+      }
+
+      &__status {
+        position: absolute;
+        right: 0.4rem;
+        bottom: 0.2rem;
+
+        svg {
+          font-size: 0.8rem;
+          color: var(--color-blue-100);
+        }
+      }
+    }
+
+    &__body {
+      @include flexHCenter;
+    }
+
+    &__body__column {
+      @include flexVCenter;
+
+      flex-direction: column;
+      width: 28rem;
+
+      & + & {
+        border-left: 0.2rem solid var(--color-dark-grey-50);
+      }
+    }
+
+    &__footer {
+      @include flexCenter;
+
+      height: 2.5rem;
+
+      &__content {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+        width: 54rem;
+        height: 2.5rem;
+      }
+
+      &__btn {
+        svg {
+          font-size: 2rem;
+          color: var(--color-dark-grey-400);
+        }
+
+        &:hover svg {
+          color: var(--color-dark-grey-500);
+        }
+      }
+    }
+
+    & + & {
+      margin-top: 1rem;
+    }
+  }
+
+  &__action {
+    @include flexVCenter;
+
+    height: 3.4rem;
+    width: 26rem;
+    border-radius: 0.2rem;
+    background: var(--color-light-grey-400);
+    user-select: none;
+
+    &--existing-query:hover {
+      background: var(--color-magenta-50);
+    }
+
+    &--service-query:hover {
+      background: var(--color-blue-50);
+    }
+
+    &--productionize-query:hover {
+      background: var(--color-orange-100);
+    }
+
+    &--create-mapping-query:hover {
+      background: var(--color-lime-75);
+    }
+
+    &--studio {
+      width: 54rem;
+
+      &:hover {
+        background: var(--color-lime-75);
+      }
+    }
+
+    &--advanced {
+      background: var(--color-dark-grey-400);
+    }
+
+    &__icon {
+      @include flexCenter;
+      @include flexConstantDimension;
+
+      height: 3.4rem;
+      width: 3.4rem;
+      border-right: 0.1rem solid var(--color-dark-shade-300);
+
+      svg {
+        color: var(--color-dark-shade-800);
+      }
+    }
+
+    &__label {
+      @include flexVCenter;
+
+      padding: 0 1.5rem;
+      height: 100%;
+      width: 100%;
+      color: var(--color-dark-shade-800);
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    & + & {
+      margin-top: 0.5rem;
+    }
+  }
+
+  &__icon--search {
+    font-size: 2rem;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem 1rem;
+
+    &__more-btn {
+      svg {
+        font-size: 2.6rem;
+        color: var(--color-dark-grey-250);
+        animation: bouncedown 0.5s alternate ease infinite;
+      }
+
+      &:hover svg {
+        color: var(--color-dark-grey-400);
+      }
+    }
+
+    @keyframes bouncedown {
+      from {
+        transform: translateY(0.2rem);
+      }
+
+      to {
+        transform: translateY(-0.2rem);
+      }
+    }
+  }
+
+  &__config-menu {
+    .menu__item {
+      font-size: 1.2rem;
+      height: 2.2rem;
+    }
+
+    .menu__item__icon svg {
+      font-size: 1.2rem;
+    }
+
+    .menu__item__label {
+      font-size: 1.2rem;
+      margin-left: 0.5rem;
+    }
+  }
+}
+
+.query-setup__wizard {
+  display: flex;
+  flex-direction: column;
+  width: 60rem;
+  background: var(--color-dark-grey-80);
+  border-radius: 0.2rem;
+
+  &__header {
+    @include flexVCenter;
+
+    height: 3.4rem;
+    border-radius: 0.2rem 0.2rem 0 0;
+
+    &__btn {
+      @include flexCenter;
+      @include flexConstantDimension;
+
+      height: 100%;
+      width: 5rem;
+
+      svg {
+        font-size: 1.2rem;
+        color: var(--color-dark-shade-250);
+      }
+
+      &:not([disabled]):hover {
+        svg {
+          color: var(--color-dark-shade-800);
+        }
+      }
+
+      &--ready svg {
+        color: var(--color-dark-shade-800);
+        animation: nudge-horizontal 0.5s infinite ease;
+      }
+
+      &[disabled] {
+        background: var(--color-dark-grey-80);
+        cursor: not-allowed;
+
+        svg {
+          color: var(--color-dark-grey-280);
+        }
+      }
+    }
+
+    &__title {
+      @include flexVCenter;
+
+      height: 100%;
+      width: calc(100% - 10rem);
+      padding: 0 2rem;
+      color: var(--color-dark-shade-800);
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.3rem;
+      border-left: 0.1rem solid var(--color-dark-shade-250);
+      cursor: default;
+    }
+  }
+
+  &__content {
+    @include flexVCenter;
+
+    flex-direction: column;
+    height: calc(100% - 3.4rem);
+  }
+
+  &__group {
+    &__title {
+      @include flexVCenter;
+
+      height: 3.4rem;
+      color: var(--color-light-grey-400);
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.3rem;
+      user-select: none;
+    }
+  }
+
+  &__group--inline {
+    height: 2.8rem;
+    display: flex;
+  }
+
+  &__group--inline &__group__title {
+    margin-right: 0.5rem;
+    justify-content: center;
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+
+  &__group + &__group {
+    margin-top: 1rem;
+  }
+
+  &__selector {
+    width: 50rem;
+  }
+}
+
+@keyframes nudge-horizontal {
+  from {
+    transform: translateX(0.1rem);
+  }
+
+  to {
+    transform: translateX(-0.1rem);
+  }
+}
+
+.query-setup__create-query {
+  height: 38.2rem;
+
+  &__header {
+    background: var(--color-lime-75);
+  }
+
+  &__project {
+    @include flexCenter;
+
+    flex-direction: column;
+    height: 16.9rem;
+    padding: 2.5rem 0 1rem;
+  }
+
+  &__graph {
+    display: flex;
+    flex-direction: column;
+    height: 13.4rem;
+    width: 50rem;
+
+    &__loader {
+      height: 13.4rem;
+      border: 0.1rem solid var(--color-dark-grey-200);
+      margin-top: 2rem;
+    }
+  }
+}
+
+.query-setup__service-query {
+  height: 32.2rem;
+
+  &__header {
+    background: var(--color-blue-50);
+  }
+
+  &__project {
+    @include flexCenter;
+
+    flex-direction: column;
+    height: 16.9rem;
+    padding: 2.5rem 0 1rem;
+  }
+
+  &__graph {
+    display: flex;
+    flex-direction: column;
+    height: 8.4rem;
+    width: 50rem;
+
+    &__loader {
+      height: 13.4rem;
+      border: 0.1rem solid var(--color-dark-grey-200);
+      margin-top: 2rem;
+    }
+  }
+
+  .query-setup__wizard__group {
+    width: 100%;
+  }
+}
+
+.query-setup__existing-service-query {
+  width: calc(100% - 10rem);
+  height: 10.2rem;
+
+  &__header {
+    background: var(--color-blue-50);
+  }
+
+  &__search-bar {
+    height: 2.8rem;
+    width: 100%;
+  }
+
+  .query-setup__wizard__selector {
+    width: 100%;
+  }
+
+  .query-setup__wizard__content {
+    @include flexVCenter;
+
+    padding: 2rem;
+  }
+}
+
+.query-setup__existing-query {
+  position: absolute;
+  bottom: 10vh;
+  top: 10vh;
+
+  &__header {
+    background: var(--color-magenta-50);
+  }
+
+  &__content {
+    height: calc(100% - 3.4rem);
+  }
+}
+
+.query-setup__productionize-query {
+  position: absolute;
+  bottom: 10vh;
+  top: 10vh;
+
+  &__header {
+    background: var(--color-magenta-50);
+  }
+
+  &__content {
+    height: calc(100% - 3.4rem);
+  }
+}

@@ -1,0 +1,63 @@
+{
+  // This is a `Solution Style` tsconfig that really does nothing but manage other project files.
+  // In a sense, a solution project is a composite project with references to other projects, but no files of its own.
+  // See https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-9.html#support-for-solution-style-tsconfigjson-files
+  //
+  // Here, none of these tsconfig.*.json files get picked up by the server,
+  // but we’d really like the language server to understand that the current .ts file
+  // probably belongs to one of the mentioned projects in this tsconfig.json.
+  //
+  // In other words, this will prevent an incorrect invocation of `tsc` without `--build` from
+  // trying to build the entire packages folder source files as one compilation
+  // (which will fail, but drop a bunch of .js files in random places as an annoying side effect).
+  // See https://github.com/RyanCavanaugh/learn-a
+  "files": [],
+  "references": [
+    // core
+    { "path": "packages/legend-manual-tests" },
+    { "path": "packages/legend-shared" },
+    { "path": "packages/legend-storage" },
+    { "path": "packages/legend-graph" },
+    { "path": "packages/legend-query-builder" },
+    { "path": "packages/legend-art" },
+    { "path": "packages/legend-lego" },
+    { "path": "packages/legend-application" },
+    // sdlc
+    { "path": "packages/legend-server-sdlc" },
+    // depot
+    { "path": "packages/legend-server-depot" },
+    // showcase
+    { "path": "packages/legend-server-showcase" },
+    { "path": "packages/legend-server-showcase-deployment" },
+    // studio
+    { "path": "packages/legend-application-studio" },
+    { "path": "packages/legend-application-studio-bootstrap" },
+    { "path": "packages/legend-application-studio-deployment" },
+    // query
+    { "path": "packages/legend-application-query" },
+    { "path": "packages/legend-application-query-bootstrap" },
+    { "path": "packages/legend-application-query-deployment" },
+    // pure ide
+    { "path": "packages/legend-application-pure-ide" },
+    { "path": "packages/legend-application-pure-ide-deployment" },
+     // repl
+     { "path": "packages/legend-application-repl" },
+     { "path": "packages/legend-application-repl-deployment" },
+    // extensions
+    { "path": "packages/legend-extension-tracer-zipkin" },
+    { "path": "packages/legend-extension-assortment" },
+    { "path": "packages/legend-extension-dsl-text" },
+    { "path": "packages/legend-extension-dsl-diagram" },
+    { "path": "packages/legend-extension-dsl-data-space" },
+    { "path": "packages/legend-extension-dsl-data-space-studio" },
+    { "path": "packages/legend-extension-dsl-service" },
+    { "path": "packages/legend-extension-dsl-persistence" },
+    { "path": "packages/legend-extension-store-service-store" },
+    { "path": "packages/legend-extension-store-flat-data" },
+    { "path": "packages/legend-extension-store-relational" },
+    { "path": "packages/legend-vscode-extension-dependencies" },
+    { "path":  "packages/legend-extension-dsl-data-quality"},
+    // fixtures
+    { "path": "fixtures/legend-mock-server" },
+  ]
+}

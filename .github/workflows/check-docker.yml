@@ -1,0 +1,87 @@
+name: Check Docker
+
+# NOTE: this job does not scan for the latest image published on Docker Hub
+# We might need to use some other tools such as http://snyk.io/ to monitor
+on:
+  # NOTE: all of our Docker images are built fairly simply, we rely on https://hub.docker.com/r/finos/legend-shared-server
+  # to serve the web application statically
+  #
+  # However, this suffers from the fact that the image is often flagged for CVEs from underlying OS images (i.e. debian)
+  # As such, to lessen the noise, we only run this workflow on schedule or when there are changes to the Dockerfiles
+  schedule:
+    - cron: '0 0 * * 2' # every Tuesday on default branch
+  push:
+    branches:
+      - master
+      - 'release/**'
+    paths:
+      - '**/Dockerfile'
+  pull_request:
+    branches:
+      - '**'
+    paths:
+      - '**/Dockerfile'
+  # Allow triggering this workflow manually
+  workflow_dispatch: {}
+
+# Cancel running jobs from previous pipelines of the same workflow on PR to save resource when commits are pushed quickly
+# NOTE: we don't want this behavior on default branch
+# See https://stackoverflow.com/a/68422069
+concurrency:
+  group: ${{ github.ref == 'refs/heads/master' && format('ci-default-branch-{0}-{1}', github.sha, github.workflow) || format('ci-pr-{0}-{1}', github.ref, github.workflow) }}
+  cancel-in-progress: true
+
+jobs:
+  check-docker-image:
+    name: Run Docker Image Checks
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: local/legend-studio
+            package: '@finos/legend-application-studio-deployment'
+          - image: local/legend-query
+            package: '@finos/legend-application-query-deployment'
+          - image: local/legend-showcase-server
+            package: '@finos/legend-server-showcase-deployment'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+      - name: Get Yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - name: Setup Yarn cache
+        uses: actions/cache@v4.0.2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+      - name: Setup Node
+        uses: actions/setup-node@v4.0.3
+        with:
+          node-version: 21
+      - name: Install dependencies
+        run: yarn
+      - name: Build image
+        run: yarn workspace ${{ matrix.package }} build-dry:docker ${{ github.sha }}
+      - name: Scan image for security issues
+        uses: aquasecurity/trivy-action@0.24.0
+        with:
+          # TODO: we should probably also setup misconfiguration scanning
+          # See https://github.com/aquasecurity/trivy-action#using-trivy-to-scan-infrastucture-as-code
+          scan-type: image
+          image-ref: ${{ matrix.image }}:${{ github.sha }}
+          format: table
+          exit-code: 1
+          # Ignore vulnerabilities/CVEs declared as unpatched/unfixed
+          ignore-unfixed: true
+          severity: CRITICAL
+          # Since we use finos/legend-shared-server static server
+          # We might better off ignore CVEs coming from static server code, as they should be flagged
+          # on the static server codebase instead, but we should potentially revisit this decision
+          vuln-type: os
+          # Manually increase timeout as the default 2-minute is not enough
+          # See https://github.com/aquasecurity/trivy/issues/802
+          timeout: 10m

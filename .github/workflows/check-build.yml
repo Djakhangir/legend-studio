@@ -1,0 +1,95 @@
+name: Check Build
+
+on:
+  push:
+    branches:
+      - master
+      - 'release/**'
+  pull_request:
+    branches:
+      - '**'
+
+# Cancel running jobs from previous pipelines of the same workflow on PR to save resource when commits are pushed quickly
+# NOTE: we don't want this behavior on default branch
+# See https://stackoverflow.com/a/68422069
+concurrency:
+  group: ${{ github.ref == 'refs/heads/master' && format('ci-default-branch-{0}-{1}', github.sha, github.workflow) || format('ci-pr-{0}-{1}', github.ref, github.workflow) }}
+  cancel-in-progress: true
+
+jobs:
+  # This job is to make sure Webpack builds the application fine. This is helpful
+  # to know as we don't want to find out this failure as late as when we prepare the
+  # artifacts to publish to Docker.
+  application-build-check:
+    name: Check Application Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - application: '@finos/legend-application-studio-deployment'
+            os: ubuntu-latest
+          # NOTE: here we run a build on Windows just to check how the build process work for Windows
+          # developers. Setting up an OS matrix for all applications is unnecessary.
+          - application: '@finos/legend-application-studio-deployment'
+            os: windows-latest
+          - application: '@finos/legend-application-query-deployment'
+            os: ubuntu-latest
+          - application: '@finos/legend-application-pure-ide-deployment'
+            os: ubuntu-latest
+          - application: '@finos/legend-application-repl-deployment'
+            os: ubuntu-latest
+          - application: '@finos/legend-server-showcase-deployment'
+            os: ubuntu-latest
+          - application: '@finos/legend-vscode-extension-dependencies'
+            os: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.1.7
+      - name: Get Yarn cache directory path
+        if: matrix.os != 'windows-latest'
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+      - name: Setup Yarn cache
+        if: matrix.os != 'windows-latest'
+        uses: actions/cache@v4.0.2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+          enableCrossOsArchive: true
+      # NOTE: this is required since Windows machine uses powershell (pwsh)
+      # See https://github.com/actions/cache/issues/988
+      - name: Get Yarn cache directory path (Windows)
+        if: matrix.os == 'windows-latest'
+        id: yarn-cache-dir-path-windows
+        run: echo "dir=$(yarn config get cacheFolder)" >> ${env:GITHUB_OUTPUT}
+      - name: Setup Yarn cache (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: actions/cache@v4.0.2
+        id: yarn-cache-windows
+        with:
+          path: ${{ steps.yarn-cache-dir-path-windows.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+          enableCrossOsArchive: true
+        # NOTE: for windows runner, to avoid OOM issue, we set swap space
+        # See https://github.com/actions/runner/issues/1051
+        # See https://github.com/al-cheb/configure-pagefile-action
+      - name: Configure Pagefile (Windows)
+        if: matrix.os == 'windows-latest'
+        uses: al-cheb/configure-pagefile-action@v1.4
+        with:
+          minimum-size: 8GB
+      - name: Setup Node
+        uses: actions/setup-node@v4.0.3
+        with:
+          node-version: 21
+      - name: Install dependencies
+        run: yarn
+      - name: Build application
+        run: yarn build && yarn workspace ${{ matrix.application }} bundle
+        env:
+          # Webpack build could consume a large amount of memory
+          NODE_OPTIONS: '--max-old-space-size=4096'

@@ -1,0 +1,15 @@
+name: 'CodeQL Config'
+
+queries:
+  - uses: security-and-quality
+
+paths:
+  - packages
+  - fixtures
+  - scripts
+
+paths-ignore:
+  - .yarn/
+  - '**/node_modules/**'
+  # skip tests as CodeQL supposed to
+  - '**/__tests__/**'

@@ -1,0 +1,18 @@
+{
+  "extends": "@finos/legend-dev-utils/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "lib",
+    "tsBuildInfoFile": "build/dev.tsbuildinfo",
+    "rootDir": "src",
+    "jsx": "react-jsxdev"
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.json",
+    // Limitation due to dependencies not ready for Typescript ESM
+    // See https://github.com/microsoft/TypeScript/issues/49298
+    "src/autocomplete/CJS__ReactSelect.cts"
+  ],
+  "references": [{ "path": "../legend-shared" }]
+}
