@@ -1,9 +1,0 @@
-{
-  "extends": "./testTsConfigExtend_grandParent.json",
-  "compilerOptions": {
-    "emitDeclarationOnly": true,
-    "jsx": "react-jsx"
-  },
-  "exclude": ["excludeParent"],
-  "references": [{ "path": "../someLib" }]
-}
